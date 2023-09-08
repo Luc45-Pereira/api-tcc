@@ -37,23 +37,24 @@ def read_user(user_id: int):
     return user.to_dict()
 
 @app.post("/users")
-def create_user(user: Users):
+def create_user(new_user: Users):
     user = User.User(conection)
-    user.set_name(user.name)
-    user.set_email(user.email)
-    user.set_password(user.password)
-    user.set_type(user.type)
+    print(user)
+    user.set_name(new_user.name)
+    user.set_email(new_user.email)
+    user.set_password(new_user.password)
+    user.set_type(new_user.type)
     user.cadastrar()
     return user.to_dict()
 
 @app.put("/users/{user_id}")
-def update_user(user_id: int, user: Users):
+def update_user(user_id: int, new_user: Users):
     user = User.User(conection, user_id)
     user.buscar(user_id)
-    user.set_name(user.name)
-    user.set_email(user.email)
-    user.set_password(user.password)
-    user.set_type(user.type)
+    user.set_name(new_user.name)
+    user.set_email(new_user.email)
+    user.set_password(new_user.password)
+    user.set_type(new_user.type)
     user.atualizar()
     return user.to_dict()
 
