@@ -25,16 +25,19 @@ class Users(BaseModel):
 def read_root():
     return {"Hello": "World"}
 
+
 @app.get("/users")
 def read_users():
     user = User.User(conection, 1)
     return user.buscar_todos()
+
 
 @app.get("/users/{user_id}")
 def read_user(user_id: int):
     user = User.User(conection)
     user.buscar(user_id)
     return user.to_dict()
+
 
 @app.post("/users")
 def create_user(new_user: Users):
@@ -47,6 +50,7 @@ def create_user(new_user: Users):
     user.cadastrar()
     return user.to_dict()
 
+
 @app.put("/users/{user_id}")
 def update_user(user_id: int, new_user: Users):
     user = User.User(conection, user_id)
@@ -57,6 +61,7 @@ def update_user(user_id: int, new_user: Users):
     user.set_type(new_user.type)
     user.atualizar()
     return user.to_dict()
+
 
 @app.delete("/users/{user_id}")
 def delete_user(user_id: int):
