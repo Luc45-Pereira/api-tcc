@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 import internal.Connection.conn as conn
-import internal.Objetos.Database as Database
+import internal.Database.Database as Database
 from app.models.pydantic import user_model
 
 
