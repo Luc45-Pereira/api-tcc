@@ -37,7 +37,7 @@ async def read_entrada(entrada_id: int, payload: token_model = Depends()):
     try:
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
         session = Session.get_session()
-        entrada = session.query(Database.entrada).filter(Database.entrada.id == entrada_id).first()
+        entrada = session.query(Database.Entrada).filter(Database.Entrada.id == entrada_id).first()
         print(entrada.__dict__)
         return entrada
 
