@@ -47,16 +47,22 @@ async def read_saida(saida_id: int, payload: token_model = Depends()):
 
 
 @router.post("/")
-async def create_saida(new_saida: saida_model):
+async def create_saida(new_saida: saida_model, payload: token_model = Depends()):
     """ Cria um nova saida """
-    print(new_saida)
-    session = Session.get_session()
-    saida = Database.Saida(descricao=new_saida.descricao, id_usuario=new_saida.id_usuario, valor=new_saida.valor, criado_em=datetime.datetime.now().date(), tag=new_saida.tag, detalhes=new_saida.detalhes)
-    session.add(saida)
-    session.commit()
-    saida = session.query(Database.Saida).filter(Database.Saida.descricao == new_saida.descricao and Database.Saida.valor == new_saida.valor).first()
+    try:
+        decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(new_saida)
+        session = Session.get_session()
+        saida = Database.Saida(descricao=new_saida.descricao, id_usuario=new_saida.id_usuario, valor=new_saida.valor, criado_em=datetime.datetime.now().date(), tag=new_saida.tag, detalhes=new_saida.detalhes)
+        session.add(saida)
+        session.commit()
+        saida = session.query(Database.Saida).filter(Database.Saida.descricao == new_saida.descricao and Database.Saida.valor == new_saida.valor).first()
 
-    return saida
+        return saida
+    
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Token inválido")
 
 
 @router.put("/update/{saida_id}")

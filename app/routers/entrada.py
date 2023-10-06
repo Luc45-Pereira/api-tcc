@@ -47,16 +47,21 @@ async def read_entrada(entrada_id: int, payload: token_model = Depends()):
 
 
 @router.post("/")
-async def create_entrada(new_entrada: entrada_model):
+async def create_entrada(new_entrada: entrada_model, payload: token_model = Depends()):
     """ Cria um nova entrada """
-    print(new_entrada)
-    session = Session.get_session()
-    entrada = Database.Entrada(descricao=new_entrada.descricao, id_usuario=new_entrada.id_usuario, valor=new_entrada.valor, criado_em=datetime.datetime.now().date(), tag=new_entrada.tag, detalhes=new_entrada.detalhes)
-    session.add(entrada)
-    session.commit()
-    entrada = session.query(Database.Entrada).filter(Database.Entrada.descricao == new_entrada.descricao and Database.Entrada.valor == new_entrada.valor).first()
+    try:
+        decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(new_entrada)
+        session = Session.get_session()
+        entrada = Database.Entrada(descricao=new_entrada.descricao, id_usuario=new_entrada.id_usuario, valor=new_entrada.valor, criado_em=datetime.datetime.now().date(), tag=new_entrada.tag, detalhes=new_entrada.detalhes)
+        session.add(entrada)
+        session.commit()
+        entrada = session.query(Database.Entrada).filter(Database.Entrada.descricao == new_entrada.descricao and Database.Entrada.valor == new_entrada.valor).first()
 
-    return entrada
+        return entrada
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Token inválido")
 
 
 @router.put("/update/{entrada_id}")
