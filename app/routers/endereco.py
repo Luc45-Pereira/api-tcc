@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = os.getenv("JWT_ALGORITHM")
 
 @router.get("/enderecos")
-async def read_users( payload: token_model = Depends()):
+async def read_enderecos( payload: token_model = Depends()):
     """ Retorna todos os enderecos cadastrados no banco de dados """
     try:
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -31,7 +31,7 @@ async def read_users( payload: token_model = Depends()):
 
 
 @router.get("/{endereco_id}")
-async def read_user(endereco_id: int, payload: token_model = Depends()):
+async def read_endereco(endereco_id: int, payload: token_model = Depends()):
     """ Retorna um endereco específico """
     try:
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -46,17 +46,20 @@ async def read_user(endereco_id: int, payload: token_model = Depends()):
 
 
 @router.post("/")
-async def create_user(new_endereco: endereco_model):
+async def create_endereco(new_endereco: endereco_model):
     """ Cria um novo endereco """
     print(new_endereco)
     session = Session.get_session()
-    endereco = Database.User(rua=new_endereco.rua, numero=new_endereco.numero, estado=new_endereco.estado, referencia=new_endereco.referencia)
+    endereco = Database.Endereco(rua=new_endereco.rua, numero=new_endereco.numero, estado=new_endereco.estado, referencia=new_endereco.referencia)
     session.add(endereco)
     session.commit()
+    endereco = session.query(Database.Endereco).filter(Database.Endereco.rua == new_endereco.rua and Database.Endereco.numero == new_endereco.rua).first()
+
+    return endereco
 
 
 @router.put("/update/{endereco_id}")
-async def update_user(endereco_id: int, new_endereco: endereco_model,  payload: token_model = Depends()):
+async def update_endereco(endereco_id: int, new_endereco: endereco_model,  payload: token_model = Depends()):
     """ Atualiza os dados de um endereco """
     try:
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -74,7 +77,7 @@ async def update_user(endereco_id: int, new_endereco: endereco_model,  payload: 
 
 
 @router.delete("/delete/{endereco_id}")
-async def delete_user(endereco_id: int, payload: token_model = Depends()):
+async def delete_endereco(endereco_id: int, payload: token_model = Depends()):
     """ Deleta um endereco """
     try:
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])

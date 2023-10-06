@@ -18,3 +18,19 @@ class endereco_model(BaseModel):
     numero: int
     estado: str
     referencia: str
+
+class entrada_model(BaseModel):
+    descricao: str
+    id_usuario: int
+    valor: float
+    criado_em: str
+    tag: str
+    detalhes: str
+
+class saida_model(BaseModel):
+    descricao: str
+    id_usuario: int
+    valor: float
+    criado_em: str
+    tag: str
+    detalhes: str
