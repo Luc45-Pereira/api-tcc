@@ -1,6 +1,6 @@
 """" Arquivo principal da API """
 from fastapi import FastAPI
-from app.routers import user, endereco, entrada, saida
+from internal.routers import user, endereco, entrada, saida
 import dotenv
 
 dotenv.load_dotenv()

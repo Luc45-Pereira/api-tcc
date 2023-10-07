@@ -2,8 +2,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 import internal.Connection.conn as conn
 import internal.Database.Database as Database
-from app.models.pydantic import user_model, token_model
-from app.Auth.token import Token
+from internal.models.pydantic import user_model, token_model
+from internal.Auth.token import Token
 import jwt
 import os
 import dotenv

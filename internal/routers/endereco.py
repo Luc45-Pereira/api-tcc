@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 import internal.Connection.conn as conn
 import internal.Database.Database as Database
-from app.models.pydantic import endereco_model, token_model
+from internal.models.pydantic import endereco_model, token_model
 import jwt
 import os
 import dotenv
