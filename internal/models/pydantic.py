@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class token_model(BaseModel):
@@ -11,7 +12,7 @@ class user_model(BaseModel):
     senha: str
     cpf: str
     data_nascimento: str
-    id_endereco: int
+    id_endereco: Optional[int] = None
 
 class endereco_model(BaseModel):
     rua: str
