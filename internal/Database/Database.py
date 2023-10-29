@@ -11,7 +11,7 @@ class User(Base):
     email = Column(String(50), nullable=False)
     senha = Column(String(50), nullable=False)
     data_nascimento = Column(DateTime, nullable=False)
-    cpf = Column(String(11), nullable=False)
+    cpf = Column(String(13), nullable=False)
     id_endereco = Column(Integer, ForeignKey('endereco.id'))
     endereco = relationship("Endereco")
 
