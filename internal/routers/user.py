@@ -24,7 +24,8 @@ async def read_users( payload: token_model = Depends()):
         usuarios = session.query(Database.User).all()
         for usuario in usuarios:
             print(usuario.__dict__)
-            print(usuario.endereco.__dict__)
+            if (usuario.endereco):
+                print(usuario.endereco.__dict__)
         return usuarios
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="Token inválido") 
@@ -41,7 +42,8 @@ async def read_user(user_id: int, payload: token_model = Depends()):
         session = Session.get_session()
         usuario = session.query(Database.User).filter(Database.User.id == user_id).first()
         print(usuario.__dict__)
-        print(usuario.endereco.__dict__)    
+        if (usuario.endereco):
+                print(usuario.endereco.__dict__)    
         return usuario
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
