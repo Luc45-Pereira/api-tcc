@@ -53,9 +53,15 @@ async def create_entrada(new_entrada: entrada_model, payload: token_model = Depe
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
         print(new_entrada)
         session = Session.get_session()
-        entrada = Database.Entrada(descricao=new_entrada.descricao, id_usuario=new_entrada.id_usuario, valor=new_entrada.valor, criado_em=datetime.datetime.now().date(), tag=new_entrada.tag, detalhes=new_entrada.detalhes)
+        entrada = Database.Entrada(descricao=new_entrada.descricao, id_usuario=new_entrada.id_usuario, id_cartao=new_entrada.id_cartao, valor=new_entrada.valor, criado_em=datetime.datetime.now().date(), tag=new_entrada.tag, detalhes=new_entrada.detalhes)
         session.add(entrada)
         session.commit()
+
+        if entrada.id_cartao:
+            cartao = session.query(Database.Cartao).filter(Database.Cartao.id == new_entrada.id_cartao).first()
+            cartao.limite_disponivel = cartao.limite_disponivel + new_entrada.valor
+            session.commit()
+
         entrada = session.query(Database.Entrada).filter(Database.Entrada.descricao == new_entrada.descricao and Database.Entrada.valor == new_entrada.valor).first()
 
         return entrada
@@ -72,6 +78,7 @@ async def update_entrada(entrada_id: int, new_entrada: entrada_model,  payload: 
         session = Session.get_session()
         entrada = session.query(Database.Entrada).filter(Database.Entrada.id == entrada_id).first()
         entrada.descricao = new_entrada.descricao
+        entrada.id_cartao = new_entrada.id_cartao
         entrada.valor = new_entrada.valor
         entrada.tag = new_entrada.tag
         entrada.detalhes = new_entrada.detalhes

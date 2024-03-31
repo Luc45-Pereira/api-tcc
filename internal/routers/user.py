@@ -98,4 +98,4 @@ async def login(login, password):
     token = Token(user_id=usuario.id, user_password=usuario.senha)
     token = token.generate_token()
 
-    return {"status": "success", "message": "Usuário encontrado", "token": token}
+    return {"status": "success", "message": "Usuário encontrado", "id": usuario.id, "token": token}

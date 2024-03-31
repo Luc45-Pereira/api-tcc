@@ -22,6 +22,7 @@ class endereco_model(BaseModel):
 class entrada_model(BaseModel):
     descricao: str
     id_usuario: int
+    id_cartao: int
     valor: float
     criado_em: str
     tag: str
@@ -30,7 +31,18 @@ class entrada_model(BaseModel):
 class saida_model(BaseModel):
     descricao: str
     id_usuario: int
+    id_cartao: int
     valor: float
     criado_em: str
     tag: str
     detalhes: str
+
+class cartao_model(BaseModel):
+    numero_cartao: str
+    codigo_cartao: str
+    validade: str
+    id_usuario: int
+    limite_total: float
+    limite_disponivel: float
+    nome_cartao: str
+    tipo_cartao: str

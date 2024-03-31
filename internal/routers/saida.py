@@ -53,9 +53,15 @@ async def create_saida(new_saida: saida_model, payload: token_model = Depends())
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
         print(new_saida)
         session = Session.get_session()
-        saida = Database.Saida(descricao=new_saida.descricao, id_usuario=new_saida.id_usuario, valor=new_saida.valor, criado_em=datetime.datetime.now().date(), tag=new_saida.tag, detalhes=new_saida.detalhes)
+        saida = Database.Saida(descricao=new_saida.descricao, id_usuario=new_saida.id_usuario, id_cartao=new_saida.id_cartao, valor=new_saida.valor, criado_em=datetime.datetime.now().date(), tag=new_saida.tag, detalhes=new_saida.detalhes)
         session.add(saida)
         session.commit()
+
+        if saida.id_cartao:
+            cartao = session.query(Database.Cartao).filter(Database.Cartao.id == saida.id_cartao).first()
+            cartao.limite_disponivel -= saida.valor
+            session.commit()
+
         saida = session.query(Database.Saida).filter(Database.Saida.descricao == new_saida.descricao and Database.Saida.valor == new_saida.valor).first()
 
         return saida
@@ -73,6 +79,7 @@ async def update_saida(saida_id: int, new_saida: saida_model,  payload: token_mo
         session = Session.get_session()
         saida = session.query(Database.Saida).filter(Database.Saida.id == saida_id).first()
         saida.descricao = new_saida.descricao
+        saida.id_cartao = new_saida.id_cartao
         saida.valor = new_saida.valor
         saida.tag = new_saida.tag
         saida.detalhes = new_saida.detalhes
