@@ -12,36 +12,30 @@
 %%{init: {'theme':'neutral'}}%%
 
 flowchart TD
-    A[API] --> JWT
+    A[API] --> JWT;
 
-    JWT --> B[Routes]
+    JWT --> B[Routes];
 
-    B --> C{Cartao}
-    B --> D{Entrada}
-    B --> E{Saida}
-    B --> F{User}
-    B --> G{Endereco}
+    B --> C{Cartao};
+    B --> D{Entrada};
+    B --> E{Saida};
+    B --> F{User};
+    B --> G{Endereco};
 
-    Chamadas[Create Read Update Delete ReadAll]
+    Chamadas[Create Read Update Delete ReadAll];
 
-    C --> Chamadas
+    C --> Chamadas;
 
-    D --> Chamadas
+    D --> Chamadas;
 
-    E --> Chamadas
+    E --> Chamadas;
 
-    F --> Chamadas
+    F --> Chamadas;
 
-    G --> Chamadas
+    G --> Chamadas;
 
 
-    SQLAlchemy
-    Chamadas --> SQLAlchemy
+    SQLAlchemy;
+    Chamadas --> SQLAlchemy;
 
-    Banco[Banco de dados]
-
-    SQLAlchemy --> Banco
-    
-  
-    
-´´´
+    SQLAlchemy --> Banco[Banco de dados];
