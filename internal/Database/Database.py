@@ -64,3 +64,13 @@ class Saida(Base):
     deletado_em = Column(Date, nullable=False)
     tag = Column(String(50), nullable=False)
     detalhes = Column(String(266), nullable=False)
+
+
+class Account(Base):
+    __tablename__ = 'accounts_user'
+    id = Column(Integer, primary_key=True)
+    id_usuario = Column(Integer, ForeignKey('usuario.id'))
+    usuario = relationship("User")
+    pluggy_connector_id = Column(String(60), nullable=False)
+    pluggy_connection_id = Column(String(60), nullable=False)
+    pluggy_account_id = Column(String(60), nullable=True)
