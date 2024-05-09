@@ -21,7 +21,7 @@ ALGORITHM = os.getenv("JWT_ALGORITHM")
 
 URL = os.getenv("PLUGGY_URL")
 
-@router.get("/")
+@router.get("/accounts")
 async def get_accounts_of_transactions(payload: token_model = Depends()):
     """ Retorna todas as contas bancarias do usuário """
     try:
