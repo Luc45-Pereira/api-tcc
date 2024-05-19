@@ -56,7 +56,7 @@ class Saida(Base):
     id = Column(Integer, primary_key=True)
     descricao = Column(String(266), nullable=False)
     id_usuario = Column(Integer, ForeignKey('usuario.id'))
-    id_cartao = Column(Integer, ForeignKey('cartao.id'))
+    id_cartao = Column(Integer, ForeignKey('cartao.id'), nullable=True)
     usuario = relationship("User")
     valor = Column(DECIMAL(6,2), nullable=False)
     criado_em = Column(Date, nullable=False)

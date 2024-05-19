@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class token_model(BaseModel):
@@ -22,7 +23,7 @@ class endereco_model(BaseModel):
 class entrada_model(BaseModel):
     descricao: str
     id_usuario: int
-    id_cartao: int
+    id_cartao: Optional[int]
     valor: float
     criado_em: str
     tag: str
@@ -31,7 +32,7 @@ class entrada_model(BaseModel):
 class saida_model(BaseModel):
     descricao: str
     id_usuario: int
-    id_cartao: int
+    id_cartao: Optional[int]
     valor: float
     criado_em: str
     tag: str
