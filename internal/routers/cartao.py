@@ -22,6 +22,7 @@ async def read_cartoes(payload: token_model = Depends()):
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = decoded_token["user"]
         session = Session.get_session()
+        print(decoded_token)
         cartoes = session.query(Database.Cartao).filter(Database.Cartao.id_usuario == user_id ).all()
         for cartao in cartoes:
             print(cartao.__dict__)

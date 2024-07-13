@@ -34,8 +34,8 @@ class transactions_model(BaseModel):
     amount: float
     amountInAccountCurrency: Optional[float]
     date: str
-    category: str
-    categoryId: str
+    category: Optional[str]
+    categoryId: Optional[str]
     balance: Optional[float]
     accountId: str
     providerCode: Optional[str]

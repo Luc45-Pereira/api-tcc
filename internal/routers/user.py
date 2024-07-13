@@ -26,8 +26,6 @@ async def read_users( payload: token_model = Depends()):
             print(usuario.__dict__)
             print(usuario.endereco.__dict__)
         return usuarios
-    except jwt.JWTError:
-        raise HTTPException(status_code=401, detail="Token inválido") 
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="Token inválido")
@@ -43,7 +41,7 @@ async def read_user(user_id: int, payload: token_model = Depends()):
         print(usuario.__dict__)
         print(usuario.endereco.__dict__)    
         return usuario
-    except jwt.JWTError:
+    except Exception as e:
         raise HTTPException(status_code=401, detail="Token inválido")
 
 
@@ -70,7 +68,7 @@ async def update_user(user_id: int, new_user: user_model,  payload: token_model 
         usuario.data_nascimento = new_user.data_nascimento
         usuario.cpf = new_user.cpf
         session.commit()
-    except jwt.JWTError:
+    except Exception as e:
         raise HTTPException(status_code=401, detail="Token inválido")
 
 
@@ -84,7 +82,7 @@ async def delete_user(user_id: int, payload: token_model = Depends()):
         usuario = session.query(Database.User).filter(Database.User.id == user_id).first()
         session.delete(usuario)
         session.commit()
-    except jwt.JWTError:
+    except Exception as e:
         raise HTTPException(status_code=401, detail="Token inválido")
 
 @router.post("/login")

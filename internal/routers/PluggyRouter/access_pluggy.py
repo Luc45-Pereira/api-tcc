@@ -60,7 +60,7 @@ async def get_connectors(payload: token_model = Depends()):
     
 
 @router.get("/connectors/{connector_id}")
-async def create_connectors(payload: dict, connector_id: str, token: token_model = Depends()):
+async def create_connectors(payload: dict = {} , connector_id: int = 0, token: token_model = Depends()):
     """ Cria um novo conector """
     try:
         decoded_token = jwt.decode(token.access_token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -73,22 +73,25 @@ async def create_connectors(payload: dict, connector_id: str, token: token_model
         url = f"{os.getenv('PLUGGY_URL')}/items"
         headers = {
             "Content-Type": "application/json",
-            "x-api-key": get_access_token()['apiKey'],
+            "accept": "application/json",
+            "X-API-KEY": get_access_token()['apiKey'],
         }
         body = {
             "parameters": payload,
             "connectorId": int(connector_id),
             "products": ["TRANSACTIONS"],
         }
-        print(body)
+        print(body, headers)
         response = requests.post(url, headers=headers, json=body)
-
+        print(response.status_code)
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=response.json())
 
         response_json = response.json()
+        print(response_json)
         try:
             account_user = Database.Account(id_usuario=decoded_token['user'], pluggy_connector_id=connector_id, pluggy_connection_id=response_json['id'])
+            print(account_user)
             session = Session.get_session()
             session.add(account_user)
             session.commit()
