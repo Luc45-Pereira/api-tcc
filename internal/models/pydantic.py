@@ -12,7 +12,7 @@ class user_model(BaseModel):
     senha: str
     cpf: str
     data_nascimento: str
-    id_endereco: int
+    id_endereco: Optional[int]
 
 class endereco_model(BaseModel):
     rua: str

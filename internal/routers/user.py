@@ -8,6 +8,7 @@ from sqlalchemy import and_
 import jwt
 import os
 import dotenv
+import hashlib
 
 dotenv.load_dotenv()
 
@@ -51,7 +52,7 @@ async def create_user(new_user: user_model):
     """ Cria um novo usuário """
     print(new_user)
     session = Session.get_session()
-    usuario = Database.User(nome=new_user.nome, email=new_user.email, senha=new_user.senha, data_nascimento=new_user.data_nascimento, cpf=new_user.cpf, id_endereco=new_user.id_endereco)
+    usuario = Database.User(nome=new_user.nome, email=new_user.email, senha=hashlib.sha256(new_user.senha.encode()).hexdigest(), data_nascimento=new_user.data_nascimento, cpf=new_user.cpf, id_endereco=new_user.id_endereco)
     session.add(usuario)
     session.commit()
 
@@ -65,7 +66,7 @@ async def update_user(user_id: int, new_user: user_model,  payload: token_model 
         usuario = session.query(Database.User).filter(Database.User.id == user_id).first()
         usuario.nome = new_user.nome
         usuario.email = new_user.email
-        usuario.senha = new_user.senha
+        usuario.senha = hashlib.sha256(new_user.senha.encode()).hexdigest()
         usuario.data_nascimento = new_user.data_nascimento
         usuario.cpf = new_user.cpf
         session.commit()
@@ -87,10 +88,13 @@ async def delete_user(user_id: int, payload: token_model = Depends()):
         raise HTTPException(status_code=401, detail="Token inválido")
 
 @router.post("/login")
-async def login(login, password):
+async def login(login, password: str):
     """ Realiza o login de um usuário """
+
+    senha_hash = hashlib.sha256(password.encode()).hexdigest()
+
     session = Session.get_session()
-    usuario = session.query(Database.User).filter(and_(Database.User.email == login, Database.User.senha == password)).first()
+    usuario = session.query(Database.User).filter(and_(Database.User.email == login, Database.User.senha == senha_hash)).first()
     if usuario is None:
         return {"status": "error", "message": "Usuário não encontrado"}
     
