@@ -4,6 +4,7 @@ import internal.Connection.conn as conn
 import internal.Database.Database as Database
 from internal.models.pydantic import user_model, token_model
 from internal.Auth.token import Token
+from sqlalchemy import and_
 import jwt
 import os
 import dotenv
@@ -89,7 +90,7 @@ async def delete_user(user_id: int, payload: token_model = Depends()):
 async def login(login, password):
     """ Realiza o login de um usuário """
     session = Session.get_session()
-    usuario = session.query(Database.User).filter(Database.User.email == login, Database.User.senha == password).first()
+    usuario = session.query(Database.User).filter(and_(Database.User.email == login, Database.User.senha == password)).first()
     if usuario is None:
         return {"status": "error", "message": "Usuário não encontrado"}
     

@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 import internal.Connection.conn as conn
 import internal.Database.Database as Database
 from internal.models.pydantic import saida_model, token_model
+from sqlalchemy import desc
 import jwt
 import os
 import dotenv
@@ -21,7 +22,7 @@ async def read_saidas(user_id:int, payload: token_model = Depends()):
     try:
         decoded_token = jwt.decode(payload.access_token, SECRET_KEY, algorithms=[ALGORITHM])
         session = Session.get_session()
-        saidas = session.query(Database.Saida).filter(Database.Saida.id_usuario == user_id ).all()
+        saidas = session.query(Database.Saida).filter(Database.Saida.id_usuario == user_id ).order_by(desc(Database.Saida.id)).all()
         for saida in saidas:
             print(saida.__dict__)
         return saidas
